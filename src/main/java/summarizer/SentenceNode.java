@@ -1,3 +1,4 @@
+package summarizer;
 
 /**
  * @author Monica Shopova <monica.shopova@gmail.com>
@@ -25,7 +26,7 @@ public class SentenceNode {
 
     @Override
     public String toString() {
-        return "SentenceNode{" +
+        return "summarizer.SentenceNode{" +
                 "id=" + id +
                 ", weight=" + weight +
                 ", sentence='" + sentence + '\'' +

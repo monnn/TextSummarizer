@@ -1,3 +1,6 @@
+import indexer.Indexer;
+import indexer.Searcher;
+import indexer.TitledDocument;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryparser.classic.ParseException;
 
@@ -45,22 +48,15 @@ public class IndexerMain {
     }
 
     public static void main(String[] args) throws IOException, ParseException {
-//        List<TitledDocument> documents = new ArrayList<>();
-//        documents.add(new TitledDocument("Lucene in Action", "Lucene in Action"));
-//        documents.add(new TitledDocument("Lucene for Dummies", "Lucene in Action"));
-//        documents.add(new TitledDocument("Managing Gigabytes", "Lucene in Action"));
-//        documents.add(new TitledDocument("The Art of Computer Science", "Lucene in Action"));
-
         List<TitledDocument> documents = getSummaries();
 
         StandardAnalyzer analyzer = new StandardAnalyzer();
         Indexer indexer = new Indexer(documents, analyzer);
         Searcher searcher = new Searcher(analyzer, indexer);
-        String querystr = "ХРАНА";
+        String query = "ХРаНА";
 
-        List<TitledDocument> results = searcher.performSearch(querystr);
+        List<TitledDocument> results = searcher.performSearch(query);
         System.out.println("Number of hits: " + results.size());
         System.out.println(results.toString());
     }
-
 }

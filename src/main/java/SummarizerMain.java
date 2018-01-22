@@ -1,3 +1,5 @@
+import summarizer.TextSummarizer;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -21,9 +23,9 @@ public class SummarizerMain {
     }
 
     public static void main(String[] args) {
-//        Scanner scanner = new Scanner(System.in);
-//        String originalText = scanner.nextLine();
-        String originalText = getDocument( PATH_TO_DOCS + "first.txt");
+        Scanner scanner = new Scanner(System.in);
+        String originalText = scanner.nextLine();
+//        String originalText = getDocument( PATH_TO_DOCS + "first.txt");
 
         int maxLength = 5;
         TextSummarizer textSummarizer = new TextSummarizer();

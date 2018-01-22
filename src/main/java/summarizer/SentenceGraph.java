@@ -1,3 +1,5 @@
+package summarizer;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -49,42 +51,32 @@ public class SentenceGraph {
     private int calculateSentenceSimilarity(String sentence1, String sentence2) {
         List<String> wordsFirstSentence = extractWords(sentence1);
         List<String> wordsSecondSentence = extractWords(sentence2);
-        int minDistance;
-        int currentDistance;
-        int distance = 0;
-        int maxLength = Math.max(sentence1.length(), sentence2.length());
-        int similarity;
-        String minDistanceWord;
-        int additionalDistance = 0;
+        double maxWords = Math.max(wordsFirstSentence.size(), wordsSecondSentence.size());
+        double similarity = 0;
+        double maxSimilarity;
+        String maxSimilarityWord;
+        double currentSimilarity;
 
         while (wordsFirstSentence.size() > 0 && wordsSecondSentence.size() > 0) {
             String firstWord = wordsFirstSentence.get(0);
             wordsFirstSentence.remove(0);
-            minDistance = 100;
-            minDistanceWord = wordsSecondSentence.get(0);
+            maxSimilarity = 0;
+            maxSimilarityWord = wordsSecondSentence.get(0);
 
             for (String secondWord : wordsSecondSentence) {
-                currentDistance = calculateWordsDistance(firstWord, secondWord);
-                if (currentDistance < minDistance) {
-                    minDistance = currentDistance;
-                    minDistanceWord = secondWord;
+                currentSimilarity = calculateWordsSimilarity(firstWord, secondWord);
+                if (currentSimilarity > maxSimilarity) {
+                    maxSimilarity = currentSimilarity;
+                    maxSimilarityWord = secondWord;
                 }
             }
-            wordsSecondSentence.remove(minDistanceWord);
-            distance += minDistance;
+            wordsSecondSentence.remove(maxSimilarityWord);
+            similarity += maxSimilarity;
         }
-        if (wordsFirstSentence.size() > 0) {
-            additionalDistance = wordsFirstSentence.stream().mapToInt(s -> s.length()).sum();
-
-        } else if (wordsSecondSentence.size() > 0) {
-            additionalDistance = wordsSecondSentence.stream().mapToInt(s -> s.length()).sum();
-        }
-        distance += additionalDistance;
-        similarity = maxLength - distance;
-
-//        System.out.println("distance is: " + distance);
+        similarity = similarity / maxWords;
 //        System.out.println("similarity is: " + similarity);
-        return similarity;
+
+        return (int)(similarity * 100);
     }
 
     private static String cleanSentence(String originalSentence) {
@@ -128,25 +120,65 @@ public class SentenceGraph {
         return words;
     }
 
-    private int calculateWordsDistance(String word1, String word2) {
-        // perform levenshtein distance
-        // add insertion and deletion
-        // add max_distance_threshold (percent)
-        // normalize similarity = 1 - totally similar, 0 - not similar
-        // search for longest common substring
-        int minLength;
-        if (word1.length() < word2.length()) {
-            minLength = word1.length();
-        } else {
-            minLength = word2.length();
-        }
-        int diff = Math.abs(word1.length() - word2.length());
-        for (int i = 0; i < minLength; i++) {
-            if (word1.charAt(i) != word2.charAt(i)) {
-                diff++;
+    private int calculateWordsSimilarity(String word1, String word2) {
+        double maxLength = Math.max(word1.length(), word2.length());
+        int longestCommonSubstringLength = longestSubstring(word1, word2);
+        double similarity = longestCommonSubstringLength / maxLength;
+        return (int) (similarity * 100);
+    }
+
+    public static int calculateWordsDistance(String word1, String word2) {
+        // using Levenshtein distance
+        word1 = word1.toLowerCase();
+        word2 = word2.toLowerCase();
+        int[] diffs = new int [word2.length() + 1];
+        for (int j = 0; j < diffs.length; j++)
+            diffs[j] = j;
+        for (int i = 1; i <= word1.length(); i++) {
+            diffs[0] = i;
+            int nw = i - 1;
+            for (int j = 1; j <= word2.length(); j++) {
+                int cj = Math.min(1 + Math.min(diffs[j], diffs[j - 1]), word1.charAt(i - 1) == word2.charAt(j - 1) ? nw : nw + 1);
+                nw = diffs[j];
+                diffs[j] = cj;
             }
         }
-        return diff;
+        return diffs[word2.length()];
+    }
+
+    private static int longestSubstring(String word1, String word2) {
+        StringBuilder sb = new StringBuilder();
+        word1 = word1.toLowerCase();
+        word2 = word2.toLowerCase();
+
+        int[][] num = new int[word1.length()][word2.length()];
+        int maxLength = 0;
+        int lastSubstringStart = 0;
+        int currentSubstringStart;
+
+        for (int i = 0; i < word1.length(); i++) {
+            for (int j = 0; j < word2.length(); j++) {
+                if (word1.charAt(i) == word2.charAt(j)) {
+                    if ((i == 0) || (j == 0)) {
+                        num[i][j] = 1;
+                    } else {
+                        num[i][j] = 1 + num[i - 1][j - 1];
+                    }
+                    if (num[i][j] > maxLength) {
+                        maxLength = num[i][j];
+                        currentSubstringStart = i - num[i][j] + 1;
+                        if (lastSubstringStart == currentSubstringStart) {
+                            sb.append(word1.charAt(i));
+                        } else {
+                            lastSubstringStart = currentSubstringStart;
+                            sb = new StringBuilder();
+                            sb.append(word1.substring(lastSubstringStart, i + 1));
+                        }
+                    }
+                }
+            }
+        }
+        return sb.length();
     }
 
     private void rank() {

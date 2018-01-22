@@ -1,3 +1,5 @@
+package summarizer;
+
 /**
  * @author Monica Shopova <monica.shopova@gmail.com>
  */
@@ -14,7 +16,7 @@ public class Edge {
 
     @Override
     public String toString() {
-        return "Edge{" +
+        return "summarizer.Edge{" +
                 "from=" + from +
                 ", to=" + to +
                 ", weight=" + weight +

@@ -1,3 +1,5 @@
+package summarizer;
+
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;

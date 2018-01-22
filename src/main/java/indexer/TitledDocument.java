@@ -1,3 +1,5 @@
+package indexer;
+
 /**
  * @author Monica Shopova <monica.shopova@gmail.com>
  */
@@ -23,7 +25,7 @@ public class TitledDocument {
 
     @Override
     public String toString() {
-        return "TitledDocument{" +
+        return "indexer.TitledDocument{" +
                 "title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 '}' + '\n';
