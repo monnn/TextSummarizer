@@ -1,11 +1,9 @@
 package summarizer;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.BreakIterator;
 import java.util.*;
-import java.util.stream.Stream;
+
+import static utils.FilesUtils.readFileByLines;
 
 /**
  * @author Monica Shopova <monica.shopova@gmail.com>
@@ -34,8 +32,6 @@ public class SentenceGraph {
             }
             topRankedSentences.add(nodes.get(i).getSentence());
         }
-//        System.out.println("topRankedSentences: ");
-//        System.out.println(topRankedSentences.toString());
         return topRankedSentences;
     }
 
@@ -74,31 +70,18 @@ public class SentenceGraph {
             similarity += maxSimilarity;
         }
         similarity = similarity / maxWords;
-//        System.out.println("similarity is: " + similarity);
 
         return (int)(similarity * 100);
     }
 
     private static String cleanSentence(String originalSentence) {
         String cleanSentence = originalSentence;
-        Set<String> stopWords = getStopWords();
+        Set<String> stopWords = readFileByLines(PATH_TO_STOPWORDS_FILE);
 
         for (String stopWord : stopWords) {
             cleanSentence = cleanSentence.replace(stopWord, " ");
         }
         return cleanSentence.substring(0, cleanSentence.length() - 1).replace(", ", " ");
-    }
-
-    private static Set<String> getStopWords() {
-        Set<String> stopWords = new HashSet<>();
-
-        try (Stream<String> stream = Files.lines(Paths.get(PATH_TO_STOPWORDS_FILE))) {
-            stream.forEach(stopWords::add);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return stopWords;
     }
 
     private List<String> extractWords(String sentence) {
@@ -115,8 +98,6 @@ public class SentenceGraph {
                 words.add(word);
             }
         }
-//        System.out.println("words are: " + words.size());
-//        System.out.println(words.toString());
         return words;
     }
 
@@ -127,7 +108,7 @@ public class SentenceGraph {
         return (int) (similarity * 100);
     }
 
-    public static int calculateWordsDistance(String word1, String word2) {
+    public int calculateWordsDistance(String word1, String word2) {
         // using Levenshtein distance
         word1 = word1.toLowerCase();
         word2 = word2.toLowerCase();
@@ -146,7 +127,7 @@ public class SentenceGraph {
         return diffs[word2.length()];
     }
 
-    private static int longestSubstring(String word1, String word2) {
+    private int longestSubstring(String word1, String word2) {
         StringBuilder sb = new StringBuilder();
         word1 = word1.toLowerCase();
         word2 = word2.toLowerCase();

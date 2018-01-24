@@ -29,7 +29,6 @@ public class Searcher {
     }
 
     public List<TitledDocument> performSearch(String query) throws IOException, ParseException {
-        System.out.println("here");
         Query q = new QueryParser("content", this.analyzer).parse(query);
 
         int hitsPerPage = 10;

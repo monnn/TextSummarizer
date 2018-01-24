@@ -6,11 +6,12 @@ import org.apache.lucene.queryparser.classic.ParseException;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static utils.FilesUtils.getFilesNames;
 
 /**
  * @author Monica Shopova <monica.shopova@gmail.com>
@@ -31,13 +32,7 @@ public class IndexerMain {
 
     private static List<TitledDocument> getSummaries() {
         List<TitledDocument> documents = new ArrayList<>();
-        List<String> documentsPaths = new ArrayList<>();
-
-        try (Stream<Path> paths = Files.walk(Paths.get(PATH_TO_SUMMARIES))) {
-            paths.filter(Files::isRegularFile).forEach(el -> documentsPaths.add(el.toString()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<String> documentsPaths = getFilesNames(PATH_TO_SUMMARIES);
 
         for (String documentPath: documentsPaths) {
             String documentName = documentPath.substring(documentPath.lastIndexOf("/") + 1, documentPath.length());
@@ -53,7 +48,7 @@ public class IndexerMain {
         StandardAnalyzer analyzer = new StandardAnalyzer();
         Indexer indexer = new Indexer(documents, analyzer);
         Searcher searcher = new Searcher(analyzer, indexer);
-        String query = "ХРаНА";
+        String query = "храна";
 
         List<TitledDocument> results = searcher.performSearch(query);
         System.out.println("Number of hits: " + results.size());
