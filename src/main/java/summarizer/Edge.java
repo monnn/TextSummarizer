@@ -14,6 +14,18 @@ public class Edge {
         this.weight = weight;
     }
 
+    public SentenceNode getFrom() {
+        return from;
+    }
+
+    public SentenceNode getTo() {
+        return to;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
     @Override
     public String toString() {
         return "summarizer.Edge{" +

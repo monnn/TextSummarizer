@@ -20,6 +20,10 @@ public class SentenceNode {
         this.weight = weight;
     }
 
+    public void increaseWeight(int weightToAdd) {
+        this.weight += weightToAdd;
+    }
+
     public int getWeight() {
         return weight;
     }

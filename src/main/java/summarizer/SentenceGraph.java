@@ -11,9 +11,8 @@ import static utils.FilesUtils.readFileByLines;
 public class SentenceGraph {
     private List<SentenceNode> nodes;
     private List<Edge> edges;
-    private static final double SIMILARITY_THRESHOLD = 0.5;
+    private static final double SIMILARITY_THRESHOLD = 10;
     private final static String PATH_TO_STOPWORDS_FILE = "resources/stopwords.txt";
-
 
     public SentenceGraph(List<String> originalSentences) {
         this.nodes = new ArrayList<>();
@@ -176,11 +175,17 @@ public class SentenceGraph {
                 weight = calculateSentenceSimilarity(firstNode.getSentence(), secondNode.getSentence());
                 if (weight > SIMILARITY_THRESHOLD) {
                     addEdge(firstNode, secondNode, weight);
-                    // use edges weight
-                    firstNode.setWeight(firstNode.getWeight() + weight);
-                    secondNode.setWeight(secondNode.getWeight() + weight);
                 }
             }
+        }
+
+        updateNodesWeight();
+    }
+
+    private void updateNodesWeight() {
+        for (Edge edge: this.edges) {
+            edge.getFrom().increaseWeight(edge.getWeight());
+            edge.getTo().increaseWeight(edge.getWeight());
         }
     }
 }
