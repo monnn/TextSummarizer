@@ -1,5 +1,6 @@
 package indexer;
 
+import org.apache.lucene.analysis.bg.BulgarianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -20,10 +21,10 @@ import java.util.List;
  * @author Monica Shopova <monica.shopova@gmail.com>
  */
 public class Searcher {
-    private StandardAnalyzer analyzer;
+    private BulgarianAnalyzer analyzer;
     private Directory index;
 
-    public Searcher(StandardAnalyzer analyzer, Indexer indexer) {
+    public Searcher(BulgarianAnalyzer analyzer, Indexer indexer) {
         this.analyzer = analyzer;
         this.index = indexer.getIndex();
     }

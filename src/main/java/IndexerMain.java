@@ -1,6 +1,7 @@
 import indexer.Indexer;
 import indexer.Searcher;
 import indexer.TitledDocument;
+import org.apache.lucene.analysis.bg.BulgarianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryparser.classic.ParseException;
 
@@ -45,10 +46,11 @@ public class IndexerMain {
     public static void main(String[] args) throws IOException, ParseException {
         List<TitledDocument> documents = getSummaries();
 
-        StandardAnalyzer analyzer = new StandardAnalyzer();
+//        StandardAnalyzer analyzer = new StandardAnalyzer();
+        BulgarianAnalyzer analyzer = new BulgarianAnalyzer();
         Indexer indexer = new Indexer(documents, analyzer);
         Searcher searcher = new Searcher(analyzer, indexer);
-        String query = "храна";
+        String query = "хРана";
 
         List<TitledDocument> results = searcher.performSearch(query);
         System.out.println("Number of hits: " + results.size());

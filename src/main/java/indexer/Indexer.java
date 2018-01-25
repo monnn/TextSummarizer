@@ -1,5 +1,6 @@
 package indexer;
 
+import org.apache.lucene.analysis.bg.BulgarianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -19,7 +20,7 @@ public class Indexer {
     private IndexWriter indexWriter;
     private Directory index;
 
-    public Indexer(List<TitledDocument> documents, StandardAnalyzer analyzer) throws IOException {
+    public Indexer(List<TitledDocument> documents, BulgarianAnalyzer analyzer) throws IOException {
         this.index = new RAMDirectory();
 
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
