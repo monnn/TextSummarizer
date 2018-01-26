@@ -39,7 +39,7 @@ public class Searcher {
         ScoreDoc[] hits = docs.scoreDocs;
         List<TitledDocument> result = new ArrayList<>();
 
-        for(int i = 0;i < hits.length; ++i) {
+        for(int i = 0; i < hits.length; ++i) {
             int docId = hits[i].doc;
             Document d = searcher.doc(docId);
             result.add(new TitledDocument(d.get("title"), d.get("content")));

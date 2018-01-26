@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Stream;
 
 import static utils.FilesUtils.getFilesNames;
@@ -44,15 +45,18 @@ public class IndexerMain {
     }
 
     public static void main(String[] args) throws IOException, ParseException {
+        Scanner scanner = new Scanner(System.in);
         List<TitledDocument> documents = getSummaries();
 
         BulgarianAnalyzer analyzer = new BulgarianAnalyzer();
         Indexer indexer = new Indexer(documents, analyzer);
         Searcher searcher = new Searcher(analyzer, indexer);
-        String query = "хРана";
 
-        List<TitledDocument> results = searcher.performSearch(query);
-        System.out.println("Number of hits: " + results.size());
-        System.out.println(results.toString());
+        while (scanner.hasNextLine()) {
+            String query = scanner.nextLine();
+            List<TitledDocument> results = searcher.performSearch(query);
+            System.out.println("Number of hits: " + results.size());
+            System.out.println(results.toString());
+        }
     }
 }

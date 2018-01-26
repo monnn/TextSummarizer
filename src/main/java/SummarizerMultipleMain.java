@@ -21,7 +21,7 @@ public class SummarizerMultipleMain {
 
         for (String documentPath: documentsPaths) {
             String originalText = readFile(documentPath);
-            int maxLength = 5;
+            int maxLength = 10;
             TextSummarizer textSummarizer = new TextSummarizer();
             String summary = textSummarizer.summarize(originalText, maxLength);
             String documentName = documentPath.substring(documentPath.lastIndexOf("/") + 1, documentPath.length());

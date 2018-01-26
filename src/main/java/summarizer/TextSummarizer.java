@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static utils.FilesUtils.readFileByLines;
 
@@ -16,11 +18,16 @@ public class TextSummarizer {
     private final static String PATH_TO_PRONOUNS_FILE = "resources/pronouns.txt";
 
     public String summarize(String text, int maxLength) {
+        text = cleanText(text);
         List<String> originalSentences = breakTextIntoSentences(text);
         SentenceGraph graph = new SentenceGraph(originalSentences);
         List<String> topRanked = graph.getTopRanked(maxLength);
         String summary = getSortedSentences(originalSentences, topRanked);
         return summary;
+    }
+
+    private String cleanText(String text) {
+        return text.replaceAll("\\s+", " ");
     }
 
     private String getSortedSentences(List<String> originalSentences, List<String> sentencesToSort) {
@@ -34,7 +41,7 @@ public class TextSummarizer {
             }
             for (String sentenceToSort : sentencesToSort) {
                 if (originalSentence.equals(sentenceToSort)) {
-                    if (containsPronounFirstHalf(sentenceToSort) && i > 0 && !sentencesToSort.contains(originalSentences.get(i - 1))) {
+                    if (containsPronounFirstThird(sentenceToSort) && i > 0 && !sentencesToSort.contains(originalSentences.get(i - 1))) {
                         // add the previous sentence also
                         stringBuilder.append(originalSentences.get(i - 1));
                         selected++;
@@ -46,15 +53,12 @@ public class TextSummarizer {
         }
         return stringBuilder.toString();
     }
-    private boolean containsPronounFirstHalf(String sentence) {
-        String firstHalf = sentence.substring(0, sentence.length() / 2);
+
+    private boolean containsPronounFirstThird(String sentence) {
+        String firstThird = sentence.substring(0, sentence.length() / 3).toLowerCase();
         Set<String> pronouns = readFileByLines(PATH_TO_PRONOUNS_FILE);
-        for (String pronoun : pronouns) {
-            if (firstHalf.contains(pronoun)) {
-                return true;
-            }
-        }
-        return false;
+        String regExp = ".*(\\b|^)(" + String.join("|", pronouns) + ")(\\b|$).*";
+        return firstThird.matches(regExp);
     }
 
     private static List<String> breakTextIntoSentences(String text) {

@@ -13,10 +13,12 @@ public class SentenceGraph {
     private List<Edge> edges;
     private static final double SIMILARITY_THRESHOLD = 10;
     private final static String PATH_TO_STOPWORDS_FILE = "resources/stopwords.txt";
+    private Stemmer stemmer;
 
     public SentenceGraph(List<String> originalSentences) {
         this.nodes = new ArrayList<>();
         this.edges = new ArrayList<>();
+        this.stemmer = new Stemmer();
 
         originalSentences.forEach(this::addNode);
         this.rank();
@@ -101,6 +103,8 @@ public class SentenceGraph {
     }
 
     private int calculateWordsSimilarity(String word1, String word2) {
+        word1 = stemmer.stem(word1);
+        word2 = stemmer.stem(word2);
         double maxLength = Math.max(word1.length(), word2.length());
         int longestCommonSubstringLength = longestSubstring(word1, word2);
         double similarity = longestCommonSubstringLength / maxLength;
