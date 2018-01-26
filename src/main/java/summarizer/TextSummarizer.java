@@ -20,8 +20,6 @@ public class TextSummarizer {
         SentenceGraph graph = new SentenceGraph(originalSentences);
         List<String> topRanked = graph.getTopRanked(maxLength);
         String summary = getSortedSentences(originalSentences, topRanked);
-//        System.out.println(graph.nodes.toString());
-//        System.out.println(graph.edges.toString());
         return summary;
     }
 
@@ -36,7 +34,7 @@ public class TextSummarizer {
             }
             for (String sentenceToSort : sentencesToSort) {
                 if (originalSentence.equals(sentenceToSort)) {
-                    if (containsPronounFirstHalf(sentenceToSort) && !sentencesToSort.contains(originalSentences.get(i - 1))) {
+                    if (containsPronounFirstHalf(sentenceToSort) && i > 0 && !sentencesToSort.contains(originalSentences.get(i - 1))) {
                         // add the previous sentence also
                         stringBuilder.append(originalSentences.get(i - 1));
                         selected++;

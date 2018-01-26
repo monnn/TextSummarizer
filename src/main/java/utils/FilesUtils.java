@@ -55,7 +55,9 @@ public class FilesUtils {
         }
         try {
             Files.createFile(path);
-            Files.write(Paths.get(path.toAbsolutePath().toString()), contentToWrite.getBytes());
+            if (contentToWrite != null) {
+                Files.write(Paths.get(path.toAbsolutePath().toString()), contentToWrite.getBytes());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

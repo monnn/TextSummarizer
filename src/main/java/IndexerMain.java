@@ -46,7 +46,6 @@ public class IndexerMain {
     public static void main(String[] args) throws IOException, ParseException {
         List<TitledDocument> documents = getSummaries();
 
-//        StandardAnalyzer analyzer = new StandardAnalyzer();
         BulgarianAnalyzer analyzer = new BulgarianAnalyzer();
         Indexer indexer = new Indexer(documents, analyzer);
         Searcher searcher = new Searcher(analyzer, indexer);

@@ -14,7 +14,6 @@ public class SummarizerMultipleMain {
     private final static String PATH_TO_DOCS = "resources/docs/";
     private final static String PATH_TO_SUMMARIES = "resources/summaries/";
 
-
     public static void main(String[] args) {
         // summarize multiple articles - read them from PATH_TO_DOCS path and write the summaries to PATH_TO_SUMMARIES
         List<String> documentsPaths = getFilesNames(PATH_TO_DOCS);
