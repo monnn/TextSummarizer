@@ -1,5 +1,4 @@
 .idea/
 *.iml
-resources/docs/
-resources/summaries/
+resources/
 target/
