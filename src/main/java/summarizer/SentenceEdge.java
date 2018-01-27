@@ -3,12 +3,12 @@ package summarizer;
 /**
  * @author Monica Shopova <monica.shopova@gmail.com>
  */
-public class Edge {
+public class SentenceEdge {
     private SentenceNode from;
     private SentenceNode to;
     private int weight;
 
-    public Edge(SentenceNode from, SentenceNode to, int weight) {
+    public SentenceEdge(SentenceNode from, SentenceNode to, int weight) {
         this.from = from;
         this.to = to;
         this.weight = weight;
@@ -28,7 +28,7 @@ public class Edge {
 
     @Override
     public String toString() {
-        return "summarizer.Edge{" +
+        return "summarizer.SentenceEdge{" +
                 "from=" + from +
                 ", to=" + to +
                 ", weight=" + weight +

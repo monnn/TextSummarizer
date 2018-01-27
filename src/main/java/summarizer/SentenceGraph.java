@@ -10,7 +10,7 @@ import static utils.FilesUtils.readFileByLines;
  */
 public class SentenceGraph {
     private List<SentenceNode> nodes;
-    private List<Edge> edges;
+    private List<SentenceEdge> edges;
     private static final double SIMILARITY_THRESHOLD = 10;
     private final static String PATH_TO_STOPWORDS_FILE = "resources/stopwords.txt";
     private Stemmer stemmer;
@@ -41,7 +41,7 @@ public class SentenceGraph {
     }
 
     private SentenceGraph addEdge(SentenceNode first, SentenceNode second, int weight) {
-        this.edges.add(new Edge(first, second, weight));
+        this.edges.add(new SentenceEdge(first, second, weight));
         return this;
     }
 
@@ -187,7 +187,7 @@ public class SentenceGraph {
     }
 
     private void updateNodesWeight() {
-        for (Edge edge: this.edges) {
+        for (SentenceEdge edge: this.edges) {
             edge.getFrom().increaseWeight(edge.getWeight());
             edge.getTo().increaseWeight(edge.getWeight());
         }
