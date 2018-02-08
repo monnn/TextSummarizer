@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -48,16 +49,40 @@ public class FilesUtils {
         return documentsPaths;
     }
 
-    public static void createFile(String directory, String fileName, String contentToWrite) {
+    public static void createFile(String directory, String fileName) {
         Path path = Paths.get(directory + fileName);
         if (Files.exists(path)) {
             return;
         }
         try {
             Files.createFile(path);
-            if (contentToWrite != null) {
-                Files.write(Paths.get(path.toAbsolutePath().toString()), contentToWrite.getBytes());
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeToFile(String directory, String fileName, String contentToWrite) {
+        Path path = Paths.get(directory + fileName);
+        if (!Files.exists(path)) {
+            return;
+        }
+        try {
+            Files.write(Paths.get(path.toAbsolutePath().toString()), contentToWrite.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeToFileMultiple(String directory, String fileName, String contentToWrite) {
+        Path path = Paths.get(directory + fileName);
+        contentToWrite = contentToWrite + '\n';
+
+        if (!Files.exists(path)) {
+            createFile(directory, fileName);
+        }
+
+        try {
+            Files.write(Paths.get(path.toAbsolutePath().toString()), contentToWrite.getBytes(), StandardOpenOption.APPEND);
         } catch (IOException e) {
             e.printStackTrace();
         }

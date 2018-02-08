@@ -2,6 +2,7 @@ package crawler;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Monica Shopova <monica.shopova@gmail.com>
@@ -11,5 +12,5 @@ public abstract class Crawler {
 
     public abstract String getArticleContent(String url) throws IOException;
 
-    public abstract List<String> getBaseUrls();
+    public abstract Map<String, String> getBaseUrls();
 }

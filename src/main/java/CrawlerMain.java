@@ -3,8 +3,10 @@ import crawler.Crawler;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static utils.FilesUtils.createFile;
+import static utils.FilesUtils.writeToFile;
 import static utils.Validation.isUrlValid;
 
 /**
@@ -26,12 +28,15 @@ public class CrawlerMain {
         Crawler crawler = getCrawler(BB_TEAM_BASE_URL);
         String documentTitle;
         String documentContent;
+        String category;
+        String fileName;
 
         if (crawler == null) {
             return;
         }
-        List<String> baseUrls = crawler.getBaseUrls();
-        for (String baseUrl : baseUrls) {
+        Map<String, String> baseUrls = crawler.getBaseUrls();
+        for (String baseUrl : baseUrls.keySet()) {
+            category = baseUrls.get(baseUrl);
             List<String> urls = crawler.getArticlesUrls(baseUrl);
             for (String url : urls) {
                 if (!isUrlValid(url)) {
@@ -39,7 +44,9 @@ public class CrawlerMain {
                 }
                 documentContent = crawler.getArticleContent(url);
                 documentTitle = url.substring(url.lastIndexOf("/") + 1, url.length()) + ".txt";
-                createFile(PATH_TO_DOCS, documentTitle, documentContent);
+                fileName = category + "_" + documentTitle;
+                createFile(PATH_TO_DOCS, fileName);
+                writeToFile(PATH_TO_DOCS, fileName, documentContent);
             }
         }
     }

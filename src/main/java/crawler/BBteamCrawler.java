@@ -6,7 +6,9 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -15,10 +17,10 @@ import java.util.stream.Collectors;
 public class BBteamCrawler extends Crawler {
 
     @Override
-    public List<String> getBaseUrls() {
-        List<String> baseArticlesUrls = new ArrayList<>();
-        baseArticlesUrls.add("https://www.bb-team.org/hranene/statii");
-        baseArticlesUrls.add("https://www.bb-team.org/trenirovki/statii");
+    public Map<String, String> getBaseUrls() {
+        Map<String, String> baseArticlesUrls = new HashMap();
+        baseArticlesUrls.put("https://www.bb-team.org/hranene/statii", "eating");
+        baseArticlesUrls.put("https://www.bb-team.org/trenirovki/statii", "exercising");
         return baseArticlesUrls;
     }
 
